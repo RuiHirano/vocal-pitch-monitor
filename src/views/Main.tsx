@@ -4,6 +4,7 @@ import { useAudio } from '../hooks/useAudio';
 import { Typography } from '@mui/material';
 import { EchoButton } from '../components/EchoButton';
 import { Recorder } from '../components/Recorder';
+import { DecibelMonitor } from '../components/DecibelMonitor';
 
 export const Main: React.FC = () => {
     const { stream } = useAudio()
@@ -18,6 +19,7 @@ export const Main: React.FC = () => {
                 </div>
                 <div style={{ marginTop: 50 }} />
                 <PitchMonitor stream={stream} buffer={300} />
+                <DecibelMonitor stream={stream} buffer={300} />
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Recorder stream={stream} />
                     <EchoButton stream={stream} />
