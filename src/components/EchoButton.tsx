@@ -32,13 +32,13 @@ export const EchoButton: React.FC<Props> = ({ stream }) => {
                     label="Echo"
                     labelPlacement="start"
                 />
-                {isEchoOn && <div style={{ width: '100%' }}>
+                {/*isEchoOn && <div style={{ width: '100%' }}>
                     <Stack spacing={2} direction="row" >
                         <VolumeDown />
                         <Slider aria-label="Volume" step={0.01} min={0} max={1} value={volume} onChange={(e, v) => { if (typeof v === "number") setVolume(v) }} />
                         <VolumeUp />
                     </Stack>
-                </div>}
+    </div>*/}
             </Stack>
             <audio ref={audioRef} />
         </div>
