@@ -10,7 +10,7 @@ export const Main: React.FC = () => {
     const { stream } = useAudio()
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10vw', marginRight: '10vw' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10vw', marginRight: '10vw', marginBottom: '10vh' }}>
             <div style={{}}>
                 <div style={{ margin: 50 }}>
                     <Typography style={{ textAlign: 'center', fontWeight: 'bold', margin: 30 }} variant='h3'>Vocal Pitch Monitor</Typography>

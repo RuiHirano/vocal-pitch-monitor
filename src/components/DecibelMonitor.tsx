@@ -1,5 +1,32 @@
+import { Slider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, YAxis, XAxis, Cell } from 'recharts';
+import { styled } from '@mui/material/styles';
+
+const ThresholdSlider = styled(Slider)(({ theme }) => ({
+    '& .MuiSlider-thumb': {
+        "&:nth-child(3)": {
+            color: "blue !important",
+            backgroundColor: 'lightblue',
+        },
+        "&:nth-child(4)": {
+            color: "green !important",
+            backgroundColor: 'lightgreen',
+        },
+        "&:nth-child(5)": {
+            color: "green !important",
+            backgroundColor: 'lightgreen',
+        },
+        "&:nth-child(6)": {
+            color: "red !important",
+            backgroundColor: 'lightcoral',
+        },
+        border: '1px solid currentColor',
+        '&:hover': {
+            boxShadow: '0 0 0 8px rgba(58, 133, 137, 0.16)',
+        },
+    },
+}));
 
 const average = function (array: number[]) {
     var result = 0
@@ -20,6 +47,7 @@ export interface Decibel {
 
 export const DecibelMonitor: React.FC<Props> = ({ stream, buffer }) => {
     const [decibels, setDecibels] = useState<Decibel[]>(Array(buffer).fill({ decibel: null }));
+    const [range, setRange] = useState<number[]>([20, 40, 50, 70])
 
     useEffect(() => {
         const getDecibels = async () => {
@@ -33,8 +61,8 @@ export const DecibelMonitor: React.FC<Props> = ({ stream, buffer }) => {
             const bufferSize = audioAnalyser.fftSize
             const processor = context.createScriptProcessor(bufferSize, 1, 1);
             audioAnalyser.fftSize = 32;
-            //audioAnalyser.maxDecibels = -30;
-            //audioAnalyser.minDecibels = -80;
+            //audioAnalyser.maxDecibels = -20;
+            //audioAnalyser.minDecibels = -30;
 
             source.connect(processor);
             processor.connect(context.destination);
@@ -48,22 +76,24 @@ export const DecibelMonitor: React.FC<Props> = ({ stream, buffer }) => {
                 source.connect(audioAnalyser);
                 const decibelArray = new Uint8Array(audioAnalyser.fftSize);
                 audioAnalyser.getByteFrequencyData(decibelArray);
-                let decibel = average(Array.from(decibelArray))
-                decibel = decibel * 100
+                // decibel: 20~40 to 0~100
+                let decibel = (average(Array.from(decibelArray)) - 20) * (5 / 2)
+                if (decibel < range[0]) decibel = 0;
+                if (decibel > range[3]) decibel = 0;
+                //decibel = decibel * 100
                 //if (decibel && decibel > 500) decibel = null;
                 //if (decibel && decibel < 100) decibel = null;
                 setDecibels(decibels => [...decibels.slice(1), { decibel: decibel }]);
             }
         }
         getDecibels();
-    }, [stream])
+    }, [stream, range])
 
     const getColorByLebel = (decibel: number, max: number, min: number) => {
-        const rate = decibel / (max - min)
         //if (rate > 0.8) return 'red'
         //if (rate < 0.5) return 'blue'
-        if (decibel > 4000) return 'red'
-        if (decibel < 3700) return 'blue'
+        if (decibel > range[2]) return 'red'
+        if (decibel < range[1]) return 'blue'
         return 'green'
     }
 
@@ -79,11 +109,23 @@ export const DecibelMonitor: React.FC<Props> = ({ stream, buffer }) => {
                         ))
                     }
                 </Bar>
-                <YAxis tick={false} type="number" domain={[minDecibel - 20, maxDecibel + 50]} />
-                <YAxis yAxisId={2} orientation="right" tick={false} type="number" domain={[minDecibel - 20, maxDecibel + 50]} />
+                <YAxis tick={false} type="number" domain={[range[0] - 5, range[3] + 5]} />
+                <YAxis yAxisId={2} orientation="right" tick={false} type="number" domain={[range[0] - 5, range[3] + 5]} />
                 <XAxis tick={false} />
                 <XAxis tick={false} xAxisId={2} orientation="top" />
             </BarChart>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <ThresholdSlider
+                    getAriaLabel={() => 'range'}
+                    style={{ width: '80%' }}
+                    value={range}
+                    min={0}
+                    max={100}
+                    step={1}
+                    onChange={(e, v) => { if (typeof v !== "number") setRange(v) }}
+                    valueLabelDisplay="auto"
+                />
+            </div>
         </div>
     )
 }
