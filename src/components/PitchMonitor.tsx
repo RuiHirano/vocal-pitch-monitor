@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, ReferenceLine, YAxis, XAxis, Label } from 'recharts';
 import { Pitch } from '../hooks/useAudio';
-import { pitchData, pitchList } from '../utils/pitch';
+import { pitchData, pitchList, toLog } from '../utils/pitch';
 const Pitchfinder = require("pitchfinder");
 const detectPitch = Pitchfinder.YIN();
 
@@ -10,6 +10,8 @@ interface Props {
     stream: MediaStream | null
     buffer: number
 }
+
+const pitchdata = Object.entries(pitchData).map((v) => v[0] + "  " + Math.log2(v[1].value))
 
 export const PitchMonitor: React.FC<Props> = ({ stream, buffer }) => {
     const [pitchs, setPitchs] = useState<Pitch[]>(Array(buffer).fill({ pitch: null }));
@@ -42,8 +44,9 @@ export const PitchMonitor: React.FC<Props> = ({ stream, buffer }) => {
                 const pitchArray = new Uint8Array(audioAnalyser.fftSize);
                 audioAnalyser.getByteTimeDomainData(pitchArray);
                 let pitch = detectPitch(pitchArray);
-                if (pitch > 500) pitch = null;
-                if (pitch < 100) pitch = null;
+                pitch = toLog(pitch);
+                if (pitch > pitchData["C8"].log) pitch = null;
+                if (pitch < pitchData["A0"].log) pitch = null;
                 setPitchs(pitchs => [...pitchs.slice(1), { pitch: pitch }]);
             }
         }
@@ -52,7 +55,7 @@ export const PitchMonitor: React.FC<Props> = ({ stream, buffer }) => {
 
     const getNearestPitch = (pitch: number | null) => {
         if (pitch == null) return "---"
-        const pitchDiff = Object.values(pitchData).map(p => Math.abs(p.value - pitch))
+        const pitchDiff = Object.values(pitchData).map(p => Math.abs(p.log - pitch))
         const nearestIndex = pitchDiff.indexOf(Math.min(...pitchDiff))
         const nearestPitch = Object.keys(pitchData)[nearestIndex]
         return nearestPitch
@@ -71,13 +74,13 @@ export const PitchMonitor: React.FC<Props> = ({ stream, buffer }) => {
                 <Line type="monotone" dataKey="pitch" stroke="#8884d8" strokeWidth={2} />
                 {pitchList.map((val, i) => {
                     return (
-                        <ReferenceLine key={i} y={val[1].value} stroke="gray" strokeDasharray={val[1].bold ? undefined : "3 3"} >
+                        <ReferenceLine key={i} y={val[1].log} stroke="gray" strokeDasharray={val[1].bold ? undefined : "3 3"} >
                             <Label position="right" value={val[0]} color="gray" />
                         </ReferenceLine>
                     )
                 })}
-                <YAxis tick={false} type="number" domain={maxPitch === 0 ? [pitchData["C4"].value, pitchData["C5"].value] : [minPitch - 20, maxPitch + 50]} />
-                <YAxis yAxisId={2} orientation="right" tick={false} type="number" domain={maxPitch === 0 ? [pitchData["C4"].value, pitchData["C5"].value] : [minPitch - 20, maxPitch + 50]} />
+                <YAxis tick={false} type="number" domain={maxPitch === 0 ? [pitchData["C4"].log, pitchData["C5"].log] : [minPitch - 0.1, maxPitch + 0.1]} />
+                <YAxis yAxisId={2} orientation="right" tick={false} type="number" domain={maxPitch === 0 ? [pitchData["C4"].log, pitchData["C5"].log] : [minPitch - 0.1, maxPitch + 0.1]} />
                 <XAxis tick={false} />
                 <XAxis tick={false} xAxisId={2} orientation="top" />
             </LineChart>
