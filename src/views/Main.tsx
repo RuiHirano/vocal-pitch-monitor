@@ -2,9 +2,10 @@ import React from 'react';
 import { PitchMonitor } from '../components/PitchMonitor';
 import { useAudio } from '../hooks/useAudio';
 import { Typography } from '@mui/material';
+import { EchoButton } from '../components/EchoButton';
 
 export const Main: React.FC = () => {
-    const { pitchs } = useAudio(300)
+    const { stream } = useAudio()
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '10vw', marginRight: '10vw' }}>
@@ -15,7 +16,10 @@ export const Main: React.FC = () => {
                     <Typography style={{ textAlign: 'center' }} variant='body1'>*Earphones must be used</Typography>
                 </div>
                 <div style={{ marginTop: 50 }} />
-                <PitchMonitor data={pitchs} />
+                <PitchMonitor stream={stream} buffer={300} />
+                <div style={{ width: '50%' }}>
+                    <EchoButton stream={stream} />
+                </div>
             </div>
         </div >
     );
