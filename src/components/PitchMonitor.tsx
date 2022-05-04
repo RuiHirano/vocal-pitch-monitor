@@ -76,8 +76,8 @@ export const PitchMonitor: React.FC<Props> = ({ stream, buffer }) => {
                         </ReferenceLine>
                     )
                 })}
-                <YAxis tick={false} type="number" domain={maxPitch === 0 ? [pitchData["C4"].value, pitchData["C5"].value] : [minPitch, maxPitch]} />
-                <YAxis yAxisId={2} orientation="right" tick={false} type="number" domain={maxPitch === 0 ? [pitchData["C4"].value, pitchData["C5"].value] : [minPitch, maxPitch]} />
+                <YAxis tick={false} type="number" domain={maxPitch === 0 ? [pitchData["C4"].value, pitchData["C5"].value] : [minPitch - 20, maxPitch + 50]} />
+                <YAxis yAxisId={2} orientation="right" tick={false} type="number" domain={maxPitch === 0 ? [pitchData["C4"].value, pitchData["C5"].value] : [minPitch - 20, maxPitch + 50]} />
                 <XAxis tick={false} />
                 <XAxis tick={false} xAxisId={2} orientation="top" />
             </LineChart>
