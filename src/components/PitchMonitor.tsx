@@ -68,7 +68,7 @@ export const PitchMonitor: React.FC<Props> = ({ stream, buffer }) => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Typography style={{ color: 'black', fontSize: 20 }}>{"Pitch"}</Typography>
                 <Typography style={{ marginLeft: 20, color: 'black', fontSize: 20 }}>{getNearestPitch(pitchs[pitchs.length - 1].pitch)}</Typography>
-                <Typography style={{ color: 'gray' }}>{`(${pitchs[pitchs.length - 1].pitch ? pitchs[pitchs.length - 1].pitch.toFixed(2) : 0})`}</Typography>
+                <Typography style={{ color: 'gray', marginLeft: 20 }}>{`(${pitchs[pitchs.length - 1].pitch ? (2 ** pitchs[pitchs.length - 1].pitch).toFixed(2) : 0} Hz)`}</Typography>
             </div>
             <LineChart width={800} height={500} data={pitchs} >
                 <Line type="monotone" dataKey="pitch" stroke="#8884d8" strokeWidth={2} />
