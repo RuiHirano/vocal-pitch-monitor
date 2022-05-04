@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { PitchMonitor } from '../components/PitchMonitor';
-import { SpectrumMonitor } from '../components/SpectrumMonitor';
-import { AudioData, useAudio } from '../hooks/useAudio';
+import { useAudio } from '../hooks/useAudio';
 import { Typography } from '@mui/material';
 
 export const Main: React.FC = () => {

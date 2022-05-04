@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { LineChart, Line, ReferenceLine, YAxis, XAxis, Label } from 'recharts';
-import { AudioData, Pitch } from '../hooks/useAudio';
+import { Pitch } from '../hooks/useAudio';
 import { pitchData, pitchList } from '../utils/pitch';
 
 interface Props {
