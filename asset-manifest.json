@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/vocal-pitch-monitor/static/css/main.073c9b0a.css",
-    "main.js": "/vocal-pitch-monitor/static/js/main.d1770209.js",
+    "main.js": "/vocal-pitch-monitor/static/js/main.3a1133ac.js",
     "static/js/787.bdc23523.chunk.js": "/vocal-pitch-monitor/static/js/787.bdc23523.chunk.js",
     "index.html": "/vocal-pitch-monitor/index.html",
     "main.073c9b0a.css.map": "/vocal-pitch-monitor/static/css/main.073c9b0a.css.map",
-    "main.d1770209.js.map": "/vocal-pitch-monitor/static/js/main.d1770209.js.map",
+    "main.3a1133ac.js.map": "/vocal-pitch-monitor/static/js/main.3a1133ac.js.map",
     "787.bdc23523.chunk.js.map": "/vocal-pitch-monitor/static/js/787.bdc23523.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
-    "static/js/main.d1770209.js"
+    "static/js/main.3a1133ac.js"
   ]
 }
